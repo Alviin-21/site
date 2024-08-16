@@ -1,0 +1,21 @@
+name: Build project and deploy to SmarterASP.NET
+on: [push]
+
+jobs:
+  build_and_deploy:
+    name: Build package and deploy to SmarterASP.NET
+    runs-on: windows-latest
+    steps:
+      - name: build file
+        uses: actions/checkout@v4
+
+      - name: Sync files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: win8114.site4now.net:21
+          username: alviin21-001
+          password: Alviin21
+      - name: Migrate
+        run: |
+          dotnet tool install --global dotnet-ef
+          dotnet ef database update --connection "<Data Source=SQL8020.site4now.net;Initial Catalog=db_aac121_alviin21;User Id=db_aac121_alviin21_admin;Password=Alviin21>"          
